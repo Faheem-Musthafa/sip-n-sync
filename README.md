@@ -111,7 +111,7 @@ For Hardware:
 ## Team Contributions
 - [Fathima Shiya]: [Idea Creator]
 - [Fathima Shifa]: [Techinal Lead]
-- [Hiba Habeeb]: [Designing]
+- [Hiba Habeeb]: [Designing ]
 
 ---
 Made with ❤️ at TinkerHub
