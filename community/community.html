@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Our Community</h1>
+        <p>Connect, Discuss, and Collaborate</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav>
+        <button class="tab-button active" data-tab="profiles">User Profiles</button>
+        <button class="tab-button" data-tab="discussions">Discussions</button>
+        <button class="tab-button" data-tab="resources">Resources</button>
+    </nav>
+
+    <main>
+        <!-- User Profiles Section -->
+        <section id="profiles" class="tab-content active">
+            <h2>User Profiles</h2>
+            <div id="userList">
+                <!-- User profiles will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Discussion Board -->
+        <section id="discussions" class="tab-content">
+            <h2>Discussion Board</h2>
+            <div id="discussionContainer">
+                <input type="text" id="discussionInput" placeholder="Start a discussion...">
+                <button id="postDiscussion">Post</button>
+                <ul id="discussionList">
+                    <!-- Discussions will appear here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Resource Sharing -->
+        <section id="resources" class="tab-content">
+            <h2>Resource Sharing</h2>
+            <input type="text" id="resourceInput" placeholder="Share a resource (link)...">
+            <button id="shareResource">Share</button>
+            <ul id="resourceList">
+                <!-- Shared resources will be listed here -->
+            </ul>
+        </section>
+    </main>
+
+    <script src="community.js"></script>
+</body>
+</html>
