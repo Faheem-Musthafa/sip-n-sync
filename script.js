@@ -29,28 +29,6 @@ const events = [
     }
 ];
 
-// Sample testimonials data
-const testimonials = [
-    {
-        name: "Sarah Chen",
-        image: "/api/placeholder/80/80",
-        text: "Sip'n'Sync has become my favorite way to unwind and meet new people. The casual atmosphere makes it easy to connect.",
-        date: "January 2025"
-    },
-    {
-        name: "Michael Ross",
-        image: "/api/placeholder/80/80",
-        text: "These meetups have helped me build genuine friendships while exploring my creative side. Truly a unique experience!",
-        date: "December 2024"
-    },
-    {
-        name: "Emma Thompson",
-        image: "/api/placeholder/80/80",
-        text: "The perfect blend of social interaction and personal growth. Every session leaves me feeling refreshed and inspired.",
-        date: "February 2025"
-    }
-];
-
 // Populate events in the events grid
 function populateEvents() {
     const eventsGrid = document.getElementById('eventsGrid');
