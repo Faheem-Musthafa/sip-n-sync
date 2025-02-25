@@ -1,34 +1,3 @@
-// Sample event data
-const events = [
-    {
-        title: "Evening Tea & Talk",
-        date: "2025-02-15",
-        time: "18:00 - 20:00",
-        location: "Local Cafe Hub",
-        description: "Join us for a relaxing evening of tea tasting and meaningful conversations.",
-        spots: 12,
-        category: "Social"
-    },
-    {
-        title: "Creative Journaling Session",
-        date: "2025-02-20",
-        time: "17:30 - 19:30",
-        location: "Community Center",
-        description: "Express yourself through creative journaling and connect with fellow writers.",
-        spots: 15,
-        category: "Creative"
-    },
-    {
-        title: "Mindful Art & Coffee",
-        date: "2025-02-25",
-        time: "14:00 - 16:00",
-        location: "Art Space Downtown",
-        description: "Combine the joy of coffee tasting with mindful art creation.",
-        spots: 10,
-        category: "Art"
-    }
-];
-
 // Populate events in the events grid
 function populateEvents() {
     const eventsGrid = document.getElementById('eventsGrid');
