@@ -1,15 +1,18 @@
 import { EventRegistration } from '../lib/types';
 
 // Google Apps Script URL from deployment
+// TODO: Replace with your actual deployed script URL
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ACTUAL_SCRIPT_ID/exec';
 
 // Google Form URL (alternative method)
+// TODO: Replace with your actual Google Form URL
 const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse';
 
 /**
  * Submit registration data to Google Sheets via Google Apps Script
  * @param eventId - The ID of the event being registered for
  * @param registration - The registration data
+ * @param eventTitle - The event title for readability
  * @returns Promise<boolean> - Success status
  */
 export async function submitToGoogleSheets(
@@ -33,7 +36,7 @@ export async function submitToGoogleSheets(
     };
 
     // Make the request to Google Apps Script
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
+    await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors', // This is important for CORS issues with Google Apps Script
       cache: 'no-cache',
@@ -53,6 +56,25 @@ export async function submitToGoogleSheets(
 }
 
 /**
+ * Helper to map form fields to Google Form entry IDs
+ * @param formData - The form data to submit
+ * @returns URLSearchParams
+ */
+function mapFormFields(formData: {
+  name: string;
+  email: string;
+  eventChoice: string;
+  message?: string;
+}): URLSearchParams {
+  return new URLSearchParams({
+    'entry.123456789': formData.name,        // Replace with actual field ID
+    'entry.987654321': formData.email,       // Replace with actual field ID
+    'entry.456789123': formData.eventChoice, // Replace with actual field ID
+    'entry.789123456': formData.message || '', // Replace with actual field ID
+  });
+}
+
+/**
  * Alternative method: Submit registration data to Google Forms
  * @param formData - The form data to submit
  * @returns Promise<boolean> - Success status
@@ -65,15 +87,10 @@ export async function submitToGoogleForm(formData: {
 }): Promise<boolean> {
   try {
     // Create form body with the correct entry IDs from your Google Form
-    const formBody = new URLSearchParams({
-      'entry.123456789': formData.name,        // Replace with actual field ID
-      'entry.987654321': formData.email,       // Replace with actual field ID
-      'entry.456789123': formData.eventChoice, // Replace with actual field ID
-      'entry.789123456': formData.message || '', // Replace with actual field ID
-    });
+    const formBody = mapFormFields(formData);
 
     // Submit the form
-    const response = await fetch(GOOGLE_FORM_URL, {
+    await fetch(GOOGLE_FORM_URL, {
       method: 'POST',
       mode: 'no-cors', // Important for CORS issues
       cache: 'no-cache',

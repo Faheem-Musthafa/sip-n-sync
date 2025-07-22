@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ArrowLeft, Search, Filter, Calendar, MapPin } from 'lucide-react';
 import { EventCard } from '../components/events/EventCard';
 import { EventRegistrationModal } from '../components/events/EventRegistrationModal';
@@ -14,38 +14,43 @@ export function EventsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  const handleEventRegister = (event: Event) => {
+  // Handler for opening registration modal
+  const handleEventRegister = useCallback((event: Event) => {
     setSelectedEvent(event);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  // Handler for closing modal
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     setSelectedEvent(null);
-  };
+  }, []);
 
-  const handleSearchChange = (value: string) => {
+  // Handler for search input
+  const handleSearchChange = useCallback((value: string) => {
     setFilters({ search: value });
-  };
+  }, [setFilters]);
 
-  const handleCategoryChange = (category: EventCategory | 'All') => {
+  // Handler for category change
+  const handleCategoryChange = useCallback((category: EventCategory | 'All') => {
     setFilters({ category });
-  };
+  }, [setFilters]);
 
-  const clearFilters = () => {
+  // Handler to clear all filters
+  const clearFilters = useCallback(() => {
     setFilters({ search: '', category: 'All' });
-  };
+  }, [setFilters]);
 
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-soft-cream pt-20">
         <div className="text-center max-w-md mx-auto px-4">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Calendar size={32} className="text-red-500" />
+            <Calendar size={32} className="text-red-500" aria-label="Error icon" />
           </div>
           <h2 className="text-2xl font-bold text-accent-gray mb-4">Something went wrong</h2>
           <p className="text-accent-gray/70 mb-6">{error}</p>
-          <Button onClick={() => window.location.reload()}>
+          <Button onClick={() => window.location.reload()} aria-label="Try Again">
             Try Again
           </Button>
         </div>
@@ -67,8 +72,9 @@ export function EventsPage() {
           <button
             onClick={() => window.location.href = '/'}
             className="mb-8 text-healing-green hover:text-energy-orange flex items-center font-medium transition-colors duration-200 group"
+            aria-label="Back to Home"
           >
-            <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
+            <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform duration-200" aria-label="Back arrow" />
             Back to Home
           </button>
           
@@ -114,8 +120,9 @@ export function EventsPage() {
               variant="outline"
               onClick={() => setShowFilters(!showFilters)}
               className="lg:hidden"
+              aria-label="Toggle Filters"
             >
-              <Filter size={16} className="mr-2" />
+              <Filter size={16} className="mr-2" aria-label="Filter icon" />
               Filters
             </Button>
             
@@ -171,7 +178,7 @@ export function EventsPage() {
           ) : events.length === 0 ? (
             <div className="text-center py-20">
               <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search size={32} className="text-gray-400" />
+                <Search size={32} className="text-gray-400" aria-label="No events found" />
               </div>
               <h3 className="text-2xl font-semibold text-accent-gray mb-4">No events found</h3>
               <p className="text-accent-gray/60 mb-6">
@@ -181,7 +188,7 @@ export function EventsPage() {
                 }
               </p>
               {(filters.search || filters.category !== 'All') && (
-                <Button onClick={clearFilters}>
+                <Button onClick={clearFilters} aria-label="Clear Filters">
                   Clear Filters
                 </Button>
               )}
@@ -201,7 +208,7 @@ export function EventsPage() {
                 </div>
                 
                 {(filters.search || filters.category !== 'All') && (
-                  <Button variant="ghost" onClick={clearFilters}>
+                  <Button variant="ghost" onClick={clearFilters} aria-label="Clear Filters">
                     Clear Filters
                   </Button>
                 )}
@@ -242,6 +249,7 @@ export function EventsPage() {
               size="lg"
               onClick={() => window.location.href = '/#contact'}
               className="bg-white text-accent-gray hover:bg-soft-cream"
+              aria-label="Join Community"
             >
               Join Community
             </Button>
@@ -249,6 +257,7 @@ export function EventsPage() {
               variant="outline" 
               size="lg"
               className="border-white text-white hover:bg-white hover:text-accent-gray"
+              aria-label="Suggest Event"
             >
               Suggest Event
             </Button>
