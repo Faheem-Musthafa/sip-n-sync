@@ -1,117 +1,89 @@
-# [sip'n'sync] 🎯
+# Sip'n'Sync Event Registration App
 
+## Overview
+Sip'n'Sync is a modern web application for managing and registering for events. The application allows users to browse events, filter by category, and register for events they're interested in attending.
 
-## Basic Details
-### Team Name: [sip'n'sync]
+## Features
+- Browse and search events
+- Filter events by category
+- View event details
+- Register for events
+- Google Sheets integration for registration data
 
+## Tech Stack
+- React
+- TypeScript
+- Tailwind CSS
+- Vite
 
-### Team Members
-- Member 1: [fathima shifa] - [malabar college of advanced studies vengara]
-- Member 2: [fathima shiya] - [malabar college of advanced studies vengara]
-- Member 3: [hiba habeeb] - [malabar college of advanced studies vengara]
+## Getting Started
 
-### Hosted Project Link
-[https://shifa369.github.io/sip-n-sync/]
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
 
-### Project Description
-[We're a community-building initiative connecting you with like-minded locals through casual meetups. Our goal is to create a supportive space where you can prioritize your well-being, build meaningful relationships, and unlock your full potential.]
+### Installation
+1. Clone the repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+   or
+   ```
+   yarn
+   ```
+3. Start the development server:
+   ```
+   npm run dev
+   ```
+   or
+   ```
+   yarn dev
+   ```
+4. Open your browser and navigate to `http://localhost:5173`
 
-### The Problem statement
-[Are We Losing Connection in a Hyper-Connected World?
-In today's fast-paced, technology-driven society, people are more connected than ever before. Yet, despite this increased connectivity, many individuals feel:
+## Google Sheets Integration
 
-1. Socially Isolated: Increased screen time and decreased face-to-face interactions lead to feelings of loneliness and disconnection.
-2. Mental Health Concerns: The pressure to present a perfect online persona can exacerbate anxiety, depression, and low self-esteem.
-3. Lack of Community: Urbanization and busy lifestyles can make it difficult for people to find and connect with like-minded individuals.
-4. Decreased Productivity: Without a supportive community, individuals may struggle to stay motivated and focused on their goals.]
+The application includes integration with Google Sheets to store event registration data. Follow these steps to set up the integration:
 
-### The Solution
-[
-Sip'n'Sync addresses these challenges by creating a platform that fosters:
+1. Follow the instructions in [GOOGLE_SHEETS_SETUP.md](./GOOGLE_SHEETS_SETUP.md) to create and configure your Google Sheet
+2. Update the Google Script URL in `src/services/googleSheets.ts`
+3. Test the integration by registering for an event
 
-1. Meaningful Connections: Bring people together in a relaxed, coffee-shop setting to combat social isolation.
-2. Self-Love and Mental Well-being: Encourage open conversations, self-care practices, and mindfulness exercises.
-3. Community Building: Provide a space for like-minded individuals to connect, share ideas, and support one another.
-4. Productivity and Motivation: Offer resources, workshops, and accountability partnerships to help individuals stay focused on their goals.
+## Project Structure
 
-By bridging the gap between technology-driven connectivity and meaningful human interactions, Sip'n'Sync aims to create a supportive community that promotes overall well-being.]
+```
+src/
+├── components/       # UI components
+│   ├── events/       # Event-related components
+│   ├── layout/       # Layout components
+│   ├── sections/     # Page sections
+│   └── ui/           # Reusable UI components
+├── hooks/            # Custom React hooks
+├── lib/              # Utilities and constants
+├── pages/            # Page components
+├── services/         # API and external services
+└── App.tsx           # Main application component
+```
 
-## Technical Details
-### Technologies/Components Used
-For Software:
-- [Html , css and javascrpit]
-- [Frameworks used]
-- [Libraries used]
-- [Git GitHub vscode]
+## Development
 
-For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
+### Available Scripts
 
-### Implementation
-For Software:
-# Installation
-[commands]
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run preview` - Preview the production build locally
 
-# Run
-[commands]
+## Deployment
 
-### Project Documentation
-For Software:
+To deploy the application:
 
-# Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
-![Capture](https://github.com/user-attachments/assets/a74018ce-c464-4cf7-b113-32a7c418bad5)
+1. Build the application:
+   ```
+   npm run build
+   ```
+2. Deploy the contents of the `dist` directory to your hosting provider
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
-![Capture1](https://github.com/user-attachments/assets/1af2861b-c1c3-4658-957d-692bb86c2917)
+## License
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
-![Capture4](https://github.com/user-attachments/assets/cf07a6a8-9ad9-490c-a754-2ccf88499cd9)
-
-# Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
-
-For Hardware:
-
-# Schematic & Circuit
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
-
-# Build Photos
-![Team](Add photo of your team here)
-
-
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
-
-### Project Demo
-# Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
-
-
-# Additional Demos
-[Add any extra demo materials/links]
-
-## Team Contributions
-- [Fathima Shiya]: [Idea Creator]
-- [Fathima Shifa]: [Techinal Lead]
-- [Hiba Habeeb]: [Designing ]
-
----
-Made with ❤️ at TinkerHub
+This project is licensed under the MIT License - see the LICENSE file for details.
