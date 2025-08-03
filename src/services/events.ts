@@ -1,6 +1,5 @@
-import { Event, EventRegistration, EventCategory } from '../lib/types';
+import { Event, EventRegistration, EventCategory } from '../lib/types.enhanced';
 import { mockEvents } from '../lib/data';
-import { api } from '../lib/api';
 
 export class EventsService {
   // Static categories for easy extension
@@ -23,7 +22,7 @@ export class EventsService {
       // return response.data || [];
 
       // For MVP, use mock data with filtering
-      let filteredEvents = this._filterEvents([...mockEvents], filters);
+      const filteredEvents = this._filterEvents([...mockEvents], filters);
       return filteredEvents;
     } catch (error) {
       console.error('Failed to fetch events:', error);

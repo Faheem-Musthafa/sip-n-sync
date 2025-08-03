@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Event, EventCategory } from '../lib/types';
+import { Event, EventCategory } from '../lib/types.enhanced';
 import { eventsService } from '../services/events';
 
 interface EventFilters {

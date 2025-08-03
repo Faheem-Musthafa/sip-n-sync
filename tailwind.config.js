@@ -7,10 +7,13 @@ export default {
         'poppins': ['Poppins', 'sans-serif'],
       },
       colors: {
-        'healing-green': '#A3D9A5',
-        'energy-orange': '#FFA552',
-        'soft-cream': '#F9F5EB',
-        'accent-gray': '#2E2E2E',
+        // Warm Coffee Theme - Perfect match for your coffee logo
+        'coffee-brown': '#92400E',      // Primary - Rich coffee brown
+        'warm-amber': '#D97706',        // Secondary - Warm amber accent
+        'cream-white': '#FFFBEB',       // Background - Creamy white
+        'dark-roast': '#451A03',        // Text - Dark roasted brown
+        'light-caramel': '#FED7AA',     // Light accent - Caramel cream
+        'medium-roast': '#A16207',      // Medium brown for variations
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',

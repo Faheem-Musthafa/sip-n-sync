@@ -17,7 +17,7 @@ import {
   Heart,
   Sparkles
 } from 'lucide-react';
-import { Event } from '../../lib/types.enhanced';
+import { Event } from '../../lib/types';
 import { useEventRegistration } from '../../hooks/useEventRegistration';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
@@ -42,7 +42,7 @@ const steps = [
   { id: 3, title: 'Confirmation', icon: CheckCircle },
 ];
 
-export function EventRegistrationModal({ event, isOpen, onClose }: EventRegistrationModalProps) {
+export function ModernEventRegistrationModal({ event, isOpen, onClose }: EventRegistrationModalProps) {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -139,7 +139,7 @@ export function EventRegistrationModal({ event, isOpen, onClose }: EventRegistra
   return (
     <>
       <Modal isOpen={isOpen} onClose={handleClose} size="xl">
-        {/* Modern Header with Coffee Theme */}
+        {/* Modern Header with Glass Effect */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-coffee-brown via-warm-amber to-medium-roast"></div>
           <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
@@ -562,5 +562,3 @@ export function EventRegistrationModal({ event, isOpen, onClose }: EventRegistra
     </>
   );
 }
-
-export default EventRegistrationModal;

@@ -1,15 +1,14 @@
-import { Calendar, Clock, MapPin, Star, DollarSign, Heart, ArrowRight } from 'lucide-react';
-import { Event } from '../../lib/types.enhanced';
+import { Calendar, Clock, MapPin, Star, DollarSign, ArrowRight } from 'lucide-react';
+import { Event } from '../../lib/types';
 import { Button } from '../ui/Button';
 
 interface EventCardProps {
   event: Event;
   onRegister: (event: Event) => void;
-  onAddToWishlist?: (event: Event) => void;
   viewMode?: 'grid' | 'list';
 }
 
-export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid' }: EventCardProps) {
+export function EnhancedEventCard({ event, onRegister, viewMode = 'grid' }: EventCardProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'short',
@@ -20,7 +19,6 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
 
   const attendancePercentage = (event.currentAttendees / event.maxAttendees) * 100;
   const spotsLeft = event.maxAttendees - event.currentAttendees;
-  const isFullyBooked = spotsLeft === 0;
 
   if (viewMode === 'list') {
     return (
@@ -38,7 +36,7 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
             
             {/* Category Badge */}
             <div className="absolute top-4 left-4">
-              <span className="bg-white/90 backdrop-blur-sm text-dark-roast px-3 py-1 rounded-full text-sm font-medium">
+              <span className="bg-white/90 backdrop-blur-sm text-accent-gray px-3 py-1 rounded-full text-sm font-medium">
                 {event.category}
               </span>
             </div>
@@ -54,7 +52,7 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
             {/* Featured Badge */}
             {event.featured && (
               <div className="absolute bottom-4 left-4">
-                <div className="flex items-center text-white bg-warm-amber/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
+                <div className="flex items-center text-white bg-energy-orange/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
                   <Star size={12} className="mr-1 fill-current" />
                   Featured
                 </div>
@@ -65,36 +63,36 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
           {/* Event Content */}
           <div className="flex-1 p-8">
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-2xl font-bold text-dark-roast font-poppins group-hover:text-warm-amber transition-colors duration-200 line-clamp-2">
+              <h3 className="text-2xl font-bold text-accent-gray font-poppins group-hover:text-energy-orange transition-colors duration-200 line-clamp-2">
                 {event.title}
               </h3>
-              <div className="text-right text-sm text-dark-roast/60 ml-4">
+              <div className="text-right text-sm text-accent-gray/60 ml-4">
                 <div className="font-medium">{spotsLeft} spots left</div>
                 <div>{event.currentAttendees}/{event.maxAttendees} registered</div>
               </div>
             </div>
             
-            <p className="text-dark-roast/70 mb-6 line-clamp-2 text-lg leading-relaxed">
+            <p className="text-accent-gray/70 mb-6 line-clamp-2 text-lg leading-relaxed">
               {event.description}
             </p>
 
             {/* Event Details */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="flex items-center text-sm text-dark-roast/60">
-                <div className="w-8 h-8 bg-coffee-brown/10 rounded-lg flex items-center justify-center mr-3">
-                  <Calendar size={14} className="text-coffee-brown" />
+              <div className="flex items-center text-sm text-accent-gray/60">
+                <div className="w-8 h-8 bg-healing-green/10 rounded-lg flex items-center justify-center mr-3">
+                  <Calendar size={14} className="text-healing-green" />
                 </div>
                 <span className="font-medium">{formatDate(event.date)}</span>
               </div>
-              <div className="flex items-center text-sm text-dark-roast/60">
-                <div className="w-8 h-8 bg-warm-amber/10 rounded-lg flex items-center justify-center mr-3">
-                  <Clock size={14} className="text-warm-amber" />
+              <div className="flex items-center text-sm text-accent-gray/60">
+                <div className="w-8 h-8 bg-energy-orange/10 rounded-lg flex items-center justify-center mr-3">
+                  <Clock size={14} className="text-energy-orange" />
                 </div>
                 <span className="font-medium">{event.time}</span>
               </div>
-              <div className="flex items-center text-sm text-dark-roast/60">
-                <div className="w-8 h-8 bg-medium-roast/10 rounded-lg flex items-center justify-center mr-3">
-                  <MapPin size={14} className="text-medium-roast" />
+              <div className="flex items-center text-sm text-accent-gray/60">
+                <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center mr-3">
+                  <MapPin size={14} className="text-purple-500" />
                 </div>
                 <span className="font-medium">{event.location}</span>
               </div>
@@ -102,50 +100,40 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
 
             {/* Progress Bar */}
             <div className="mb-6">
-              <div className="flex justify-between text-xs text-dark-roast/60 mb-2">
+              <div className="flex justify-between text-xs text-accent-gray/60 mb-2">
                 <span>Attendance</span>
-                <span>{Math.round(attendancePercentage)}% filled</span>
+                <span>{event.currentAttendees}/{event.maxAttendees}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className="bg-gradient-to-r from-coffee-brown to-warm-amber h-2 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-healing-green to-energy-orange h-2 rounded-full transition-all duration-300"
                   style={{ width: `${attendancePercentage}%` }}
                 ></div>
               </div>
             </div>
 
-            {/* Organizer */}
+            {/* Register Button */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <img
-                  src={event.organizer.avatar || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'}
+                  src={event.organizer.avatar}
                   alt={event.organizer.name}
                   className="w-10 h-10 rounded-full object-cover mr-3"
                 />
                 <div>
-                  <p className="text-sm font-medium text-dark-roast">Hosted by</p>
-                  <p className="text-sm text-dark-roast/70">{event.organizer.name}</p>
+                  <p className="text-sm font-medium text-accent-gray">{event.organizer.name}</p>
+                  <p className="text-xs text-accent-gray/60">Event Organizer</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                {onAddToWishlist && (
-                  <button
-                    onClick={() => onAddToWishlist(event)}
-                    className="p-2 text-dark-roast/60 hover:text-warm-amber transition-colors duration-200"
-                    title="Add to Wishlist"
-                  >
-                    <Heart size={18} />
-                  </button>
-                )}
-                <Button
-                  onClick={() => onRegister(event)}
-                  disabled={isFullyBooked}
-                  className="group flex items-center gap-2"
-                >
-                  {isFullyBooked ? 'Event Full' : 'Register Now'}
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
-                </Button>
-              </div>
+              
+              <Button
+                onClick={() => onRegister(event)}
+                disabled={spotsLeft === 0}
+                className="group flex items-center gap-2"
+              >
+                {spotsLeft === 0 ? 'Event Full' : 'Register Now'}
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
             </div>
           </div>
         </div>
@@ -168,7 +156,7 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
         
         {/* Category Badge */}
         <div className="absolute top-4 left-4">
-          <span className="bg-white/90 backdrop-blur-sm text-dark-roast px-3 py-1 rounded-full text-sm font-medium">
+          <span className="bg-white/90 backdrop-blur-sm text-accent-gray px-3 py-1 rounded-full text-sm font-medium">
             {event.category}
           </span>
         </div>
@@ -184,7 +172,7 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
         {/* Featured Badge */}
         {event.featured && (
           <div className="absolute bottom-4 left-4">
-            <div className="flex items-center text-white bg-warm-amber/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
+            <div className="flex items-center text-white bg-energy-orange/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
               <Star size={12} className="mr-1 fill-current" />
               Featured
             </div>
@@ -193,79 +181,66 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
         
         {/* Spots Left */}
         <div className="absolute bottom-4 right-4">
-          <div className={`text-white backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium ${
-            isFullyBooked ? 'bg-red-500/80' : 'bg-black/30'
-          }`}>
-            {isFullyBooked ? 'Full' : `${spotsLeft} spots left`}
+          <div className="text-white bg-black/30 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
+            {spotsLeft} spots left
           </div>
         </div>
-
-        {/* Wishlist Button */}
-        {onAddToWishlist && (
-          <button
-            onClick={() => onAddToWishlist(event)}
-            className="absolute top-4 right-16 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all duration-200"
-            title="Add to Wishlist"
-          >
-            <Heart size={16} />
-          </button>
-        )}
       </div>
 
       {/* Event Content */}
       <div className="p-6">
-        <h3 className="text-xl font-bold text-dark-roast mb-3 font-poppins group-hover:text-warm-amber transition-colors duration-200 line-clamp-2">
+        <h3 className="text-xl font-bold text-accent-gray mb-3 font-poppins group-hover:text-energy-orange transition-colors duration-200 line-clamp-2">
           {event.title}
         </h3>
         
-        <p className="text-dark-roast/70 mb-6 line-clamp-3 text-sm leading-relaxed">
+        <p className="text-accent-gray/70 mb-6 line-clamp-3 text-sm leading-relaxed">
           {event.description}
         </p>
 
         {/* Event Details */}
         <div className="space-y-3 mb-6">
-          <div className="flex items-center text-sm text-dark-roast/60">
-            <div className="w-8 h-8 bg-coffee-brown/10 rounded-lg flex items-center justify-center mr-3">
-              <Calendar size={14} className="text-coffee-brown" />
+          <div className="flex items-center text-sm text-accent-gray/60">
+            <div className="w-8 h-8 bg-healing-green/10 rounded-lg flex items-center justify-center mr-3">
+              <Calendar size={14} className="text-healing-green" />
             </div>
             <span className="font-medium">{formatDate(event.date)}</span>
           </div>
-          <div className="flex items-center text-sm text-dark-roast/60">
-            <div className="w-8 h-8 bg-warm-amber/10 rounded-lg flex items-center justify-center mr-3">
-              <Clock size={14} className="text-warm-amber" />
+          <div className="flex items-center text-sm text-accent-gray/60">
+            <div className="w-8 h-8 bg-energy-orange/10 rounded-lg flex items-center justify-center mr-3">
+              <Clock size={14} className="text-energy-orange" />
             </div>
             <span className="font-medium">{event.time}</span>
           </div>
-          <div className="flex items-center text-sm text-dark-roast/60">
-            <div className="w-8 h-8 bg-medium-roast/10 rounded-lg flex items-center justify-center mr-3">
-              <MapPin size={14} className="text-medium-roast" />
+          <div className="flex items-center text-sm text-accent-gray/60">
+            <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center mr-3">
+              <MapPin size={14} className="text-purple-500" />
             </div>
             <span className="font-medium">{event.location}</span>
           </div>
         </div>
 
         {/* Organizer */}
-        <div className="flex items-center mb-6 p-3 bg-cream-white rounded-xl">
+        <div className="flex items-center mb-6 p-3 bg-soft-cream rounded-xl">
           <img
-            src={event.organizer.avatar || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'}
+            src={event.organizer.avatar}
             alt={event.organizer.name}
             className="w-8 h-8 rounded-full object-cover mr-3"
           />
           <div>
-            <p className="text-sm font-medium text-dark-roast">Hosted by</p>
-            <p className="text-sm text-dark-roast/70">{event.organizer.name}</p>
+            <p className="text-sm font-medium text-accent-gray">Hosted by</p>
+            <p className="text-sm text-accent-gray/70">{event.organizer.name}</p>
           </div>
         </div>
 
         {/* Progress Bar */}
         <div className="mb-6">
-          <div className="flex justify-between text-xs text-dark-roast/60 mb-2">
+          <div className="flex justify-between text-xs text-accent-gray/60 mb-2">
             <span>Attendance</span>
             <span>{event.currentAttendees}/{event.maxAttendees}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-gradient-to-r from-coffee-brown to-warm-amber h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-healing-green to-energy-orange h-2 rounded-full transition-all duration-300"
               style={{ width: `${attendancePercentage}%` }}
             ></div>
           </div>
@@ -275,13 +250,11 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
         <Button
           onClick={() => onRegister(event)}
           className="w-full"
-          disabled={isFullyBooked}
+          disabled={spotsLeft === 0}
         >
-          {isFullyBooked ? 'Event Full' : 'Register Now'}
+          {spotsLeft === 0 ? 'Event Full' : 'Register Now'}
         </Button>
       </div>
     </div>
   );
 }
-
-export default EventCard;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { CheckCircle, X, AlertCircle, AlertTriangle, Info } from 'lucide-react';
 
 interface ToastProps {
@@ -17,7 +17,7 @@ export function Toast({ message, type = 'success', onClose, duration = 4000 }: T
   const config = {
     success: {
       icon: CheckCircle,
-      bgColor: 'bg-healing-green',
+      bgColor: 'bg-coffee-brown',
       textColor: 'text-white',
     },
     error: {
@@ -27,12 +27,12 @@ export function Toast({ message, type = 'success', onClose, duration = 4000 }: T
     },
     warning: {
       icon: AlertTriangle,
-      bgColor: 'bg-energy-orange',
+      bgColor: 'bg-warm-amber',
       textColor: 'text-white',
     },
     info: {
       icon: Info,
-      bgColor: 'bg-blue-500',
+      bgColor: 'bg-medium-roast',
       textColor: 'text-white',
     },
   };
@@ -40,8 +40,8 @@ export function Toast({ message, type = 'success', onClose, duration = 4000 }: T
   const { icon: IconComponent, bgColor, textColor } = config[type];
 
   return (
-    <div className="fixed top-4 right-4 z-60 animate-slide-up">
-      <div className={`${bgColor} ${textColor} px-6 py-4 rounded-xl shadow-lg flex items-center space-x-3 max-w-md`}>
+    <div className="fixed top-6 right-6 z-[9999] animate-slide-up">
+      <div className={`${bgColor} ${textColor} px-6 py-4 rounded-xl shadow-2xl border-2 border-white/20 flex items-center space-x-3 max-w-md backdrop-blur-sm`}>
         <IconComponent size={24} className="flex-shrink-0" />
         <p className="font-medium">{message}</p>
         <button

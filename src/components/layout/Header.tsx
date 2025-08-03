@@ -19,15 +19,28 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 w-full bg-soft-cream/95 backdrop-blur-sm z-50 border-b border-healing-green/20">
+    <header className="fixed top-0 w-full bg-cream-white/95 backdrop-blur-sm z-50 border-b border-coffee-brown/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center cursor-pointer" onClick={() => handleNavClick('/')}>
-            <div className="w-10 h-10 bg-gradient-to-r from-healing-green to-energy-orange rounded-full flex items-center justify-center mr-3">
-              <Coffee className="text-white" size={20} />
+            <div className="w-10 h-10 bg-gradient-to-r from-coffee-brown to-warm-amber rounded-full flex items-center justify-center mr-3 overflow-hidden">
+              <img 
+                src="/logo.svg" 
+                alt="Sip'n'Sync Logo" 
+                className="w-8 h-8 object-contain"
+                onError={(e) => {
+                  // Fallback to Coffee icon if logo doesn't load
+                  e.currentTarget.style.display = 'none';
+                  const fallbackIcon = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (fallbackIcon) {
+                    fallbackIcon.style.display = 'block';
+                  }
+                }}
+              />
+              <Coffee className="text-white hidden" size={20} />
             </div>
-            <span className="text-2xl font-bold text-accent-gray font-poppins">
+            <span className="text-2xl font-bold text-dark-roast font-poppins">
               {APP_CONFIG.name}
             </span>
           </div>
@@ -38,7 +51,7 @@ export function Header() {
               <button
                 key={item.name}
                 onClick={() => handleNavClick(item.href)}
-                className="text-accent-gray hover:text-energy-orange transition-colors duration-200 font-medium"
+                className="text-dark-roast hover:text-warm-amber transition-colors duration-200 font-medium"
               >
                 {item.name}
               </button>
@@ -56,7 +69,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-accent-gray p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            className="md:hidden text-dark-roast p-2 hover:bg-light-caramel rounded-lg transition-colors duration-200"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -65,13 +78,13 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-healing-green/20 animate-fade-in">
+          <div className="md:hidden py-4 border-t border-coffee-brown/20 animate-fade-in">
             <nav className="flex flex-col space-y-4">
               {NAVIGATION_ITEMS.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => handleNavClick(item.href)}
-                  className="text-accent-gray hover:text-energy-orange transition-colors duration-200 font-medium text-left"
+                  className="text-dark-roast hover:text-warm-amber transition-colors duration-200 font-medium text-left"
                 >
                   {item.name}
                 </button>

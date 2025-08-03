@@ -1,21 +1,20 @@
-import React from 'react';
 import { Star, Quote } from 'lucide-react';
 import { mockTestimonials } from '../../lib/data';
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="py-20 bg-gradient-to-b from-soft-cream/50 to-white">
+    <section id="testimonials" className="py-20 bg-gradient-to-b from-cream-white/50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-energy-orange/10 border border-energy-orange/20 rounded-full text-energy-orange font-medium mb-6">
+          <div className="inline-flex items-center px-4 py-2 bg-warm-amber/10 border border-warm-amber/20 rounded-full text-warm-amber font-medium mb-6">
             <Star size={16} className="mr-2" />
             Community Success Stories
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold text-accent-gray mb-6 font-poppins">
-            What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-healing-green to-energy-orange">Community</span> Says
+          <h2 className="text-4xl md:text-6xl font-bold text-dark-roast mb-6 font-poppins">
+            What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-coffee-brown to-warm-amber">Community</span> Says
           </h2>
-          <p className="text-xl text-accent-gray/70 max-w-3xl mx-auto">
+          <p className="text-xl text-dark-roast/70 max-w-3xl mx-auto">
             Real stories from real people who have transformed their lives through our community and events.
           </p>
         </div>
@@ -30,7 +29,7 @@ export function Testimonials() {
             >
               {/* Quote Icon */}
               <div className="absolute -top-4 left-8">
-                <div className="w-8 h-8 bg-gradient-to-r from-healing-green to-energy-orange rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-coffee-brown to-warm-amber rounded-full flex items-center justify-center">
                   <Quote size={16} className="text-white" />
                 </div>
               </div>
@@ -38,12 +37,12 @@ export function Testimonials() {
               {/* Rating */}
               <div className="flex items-center mb-6 mt-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} size={18} className="text-energy-orange fill-current" />
+                  <Star key={i} size={18} className="text-warm-amber fill-current" />
                 ))}
               </div>
               
               {/* Content */}
-              <blockquote className="text-accent-gray mb-8 leading-relaxed text-lg">
+              <blockquote className="text-dark-roast mb-8 leading-relaxed text-lg">
                 "{testimonial.content}"
               </blockquote>
               
@@ -52,16 +51,16 @@ export function Testimonials() {
                 <img
                   src={testimonial.avatar}
                   alt={testimonial.name}
-                  className="w-14 h-14 rounded-full object-cover mr-4 ring-2 ring-healing-green/20"
+                  className="w-14 h-14 rounded-full object-cover mr-4 ring-2 ring-warm-amber/20"
                 />
                 <div>
-                  <h4 className="font-semibold text-accent-gray font-poppins text-lg">
+                  <h4 className="font-semibold text-dark-roast font-poppins text-lg">
                     {testimonial.name}
                   </h4>
-                  <p className="text-accent-gray/60">
+                  <p className="text-dark-roast/60">
                     {testimonial.role}
                     {testimonial.company && (
-                      <span className="text-healing-green"> • {testimonial.company}</span>
+                      <span className="text-coffee-brown"> • {testimonial.company}</span>
                     )}
                   </p>
                 </div>
@@ -70,28 +69,21 @@ export function Testimonials() {
           ))}
         </div>
 
-        {/* Stats Section */}
-        <div className="bg-gradient-to-r from-healing-green via-healing-green/90 to-energy-orange rounded-3xl p-8 md:p-12 text-white text-center">
-          <h3 className="text-3xl md:text-4xl font-bold mb-8 font-poppins">
-            Join a Thriving Community
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2">500+</div>
-              <div className="text-white/80">Happy Members</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2">100+</div>
-              <div className="text-white/80">Events Hosted</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2">95%</div>
-              <div className="text-white/80">Satisfaction Rate</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2">4.9★</div>
-              <div className="text-white/80">Average Rating</div>
-            </div>
+        {/* Simple CTA */}
+        <div className="text-center">
+          <div className="bg-gradient-to-r from-coffee-brown to-warm-amber rounded-3xl p-8 text-white">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 font-poppins">
+              Ready to Join Our Community?
+            </h3>
+            <p className="text-white/90 mb-6 text-lg">
+              Be part of a community that celebrates growth, networking, and meaningful connections.
+            </p>
+            <button
+              onClick={() => window.location.href = '/events'}
+              className="bg-white text-coffee-brown px-8 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors duration-200"
+            >
+              Explore Events
+            </button>
           </div>
         </div>
       </div>

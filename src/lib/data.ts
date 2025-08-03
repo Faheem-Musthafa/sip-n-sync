@@ -1,4 +1,4 @@
-import { Event, Testimonial } from './types';
+import { Event, Testimonial } from './types.enhanced';
 
 export const mockEvents: Event[] = [
   {
