@@ -1,15 +1,14 @@
-import { Calendar, Clock, MapPin, Star, DollarSign, Heart, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, MapPin, Star, DollarSign, ArrowRight } from 'lucide-react';
 import { Event } from '../../lib/types.enhanced';
 import { Button } from '../ui/Button';
 
 interface EventCardProps {
   event: Event;
   onRegister: (event: Event) => void;
-  onAddToWishlist?: (event: Event) => void;
   viewMode?: 'grid' | 'list';
 }
 
-export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid' }: EventCardProps) {
+export function EventCard({ event, onRegister, viewMode = 'grid' }: EventCardProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'short',
@@ -128,15 +127,6 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {onAddToWishlist && (
-                  <button
-                    onClick={() => onAddToWishlist(event)}
-                    className="p-2 text-dark-roast/60 hover:text-warm-amber transition-colors duration-200"
-                    title="Add to Wishlist"
-                  >
-                    <Heart size={18} />
-                  </button>
-                )}
                 <Button
                   onClick={() => onRegister(event)}
                   disabled={isFullyBooked}
@@ -199,17 +189,6 @@ export function EventCard({ event, onRegister, onAddToWishlist, viewMode = 'grid
             {isFullyBooked ? 'Full' : `${spotsLeft} spots left`}
           </div>
         </div>
-
-        {/* Wishlist Button */}
-        {onAddToWishlist && (
-          <button
-            onClick={() => onAddToWishlist(event)}
-            className="absolute top-4 right-16 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all duration-200"
-            title="Add to Wishlist"
-          >
-            <Heart size={16} />
-          </button>
-        )}
       </div>
 
       {/* Event Content */}

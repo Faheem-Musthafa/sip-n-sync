@@ -2,7 +2,8 @@ import { EventRegistration } from '../lib/types';
 
 // Google Apps Script URL from deployment
 // TODO: Replace with your actual deployed script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ACTUAL_SCRIPT_ID/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx779hpx2fztpEELRiTgbE5sey3bMszyVfFBF7bdw5ifQvrnqKowvMWA1bd6ucEuNgGqw/exec';
+const INTERNAL_API_URL = '/api/registrations';
 
 // Google Form URL (alternative method)
 // TODO: Replace with your actual Google Form URL
@@ -35,19 +36,23 @@ export async function submitToGoogleSheets(
       timestamp: new Date().toISOString()
     };
 
-    // Make the request to Google Apps Script
-    await fetch(GOOGLE_SCRIPT_URL, {
+    // Preferred: send to internal API (serverless) for secure Sheets write
+    const resp = await fetch(INTERNAL_API_URL, {
       method: 'POST',
-      mode: 'no-cors', // This is important for CORS issues with Google Apps Script
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
-    // Since 'no-cors' mode doesn't allow reading the response,
-    // we assume success if no error is thrown
+    if (resp.ok) return true;
+
+    // Fallback: attempt direct Apps Script (opaque response due to no-cors)
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      cache: 'no-cache',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
     return true;
   } catch (error) {
     console.error('Failed to submit to Google Sheets:', error);

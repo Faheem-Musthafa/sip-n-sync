@@ -50,50 +50,40 @@ const values = [
 
 const team = [
   {
-    name: 'Sarah Chen',
-    role: 'Founder & Community Director',
-    bio: 'Former wellness coach with 8+ years in community building. Passionate about creating safe spaces for growth.',
-    image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
-    specialties: ['Community Building', 'Wellness Coaching', 'Event Planning'],
+    name: 'Fathima Shiya',
+    role: 'Founder',
+    bio: '',
+    image: '/About/Shiya.jpg',
+    specialties: [],
+  },{
+    name: 'Fathima Shifa',
+    role: 'Founder',
+    bio: '',
+    image: '/About/Shifa.jpg',
+    specialties: [],
   },
   {
-    name: 'Marcus Johnson',
-    role: 'Head of Programming',
-    bio: 'Productivity expert and mindfulness practitioner. Designs transformative workshop experiences.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-    specialties: ['Workshop Design', 'Mindfulness', 'Productivity Systems'],
+    name: 'Faheem Musthafa C.P',
+    role: 'Tech Architect',
+    bio: '',
+    image: '/About/Faheem.jpg',
+    specialties: [],
   },
   {
-    name: 'Emma Rodriguez',
-    role: 'Creative Director',
-    bio: 'Artist and creative therapist helping others discover their unique creative voice and expression.',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
-    specialties: ['Art Therapy', 'Creative Workshops', 'Design Thinking'],
-  },
+    name: 'Hiba Habeeb',
+    role: 'Content Creator',
+    bio: '',
+    image: '/About/hiba.jpg',
+    specialties: [],
+  },{
+    name: 'Nihal Muhammed',
+    role: 'Marketing Specialist',
+    bio: '',
+  image: '/About/Nihal.jpg',
+    specialties: [],
+  }
 ];
 
-const milestones = [
-  {
-    year: '2022',
-    title: 'The Beginning',
-    description: 'Started as a small weekly meetup in a local café with 12 passionate individuals.',
-  },
-  {
-    year: '2023',
-    title: 'Growing Community',
-    description: 'Expanded to monthly workshops and reached 500 community members across 3 cities.',
-  },
-  {
-    year: '2024',
-    title: 'Digital Platform',
-    description: 'Launched our digital platform enabling virtual events and global community connections.',
-  },
-  {
-    year: '2025',
-    title: 'Nationwide Impact',
-    description: 'Now serving 2,500+ members across 12 cities with hybrid events and partnerships.',
-  },
-];
 
 export function AboutPage() {
   const [activeTeamMember, setActiveTeamMember] = useState(0);
@@ -194,8 +184,8 @@ export function AboutPage() {
                 <img
                   src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&h=400&fit=crop"
                   alt="Community gathering"
-                  className="w-full h-80 object-cover rounded-2xl"
-                />
+                  className="w-full h-64 sm:h-72 md:h-80 lg:h-96 object-cover rounded-2xl"
+                />  
                 <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-healing-green mb-1">2.5K+</div>
@@ -241,41 +231,6 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-accent-gray mb-6 font-poppins">
-              Our Journey
-            </h2>
-            <p className="text-xl text-accent-gray/70">
-              From humble beginnings to a thriving community
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-healing-green to-energy-orange"></div>
-            
-            {milestones.map((milestone) => (
-              <div key={milestone.year} className="relative flex items-start mb-12">
-                <div className="absolute left-6 w-4 h-4 bg-healing-green rounded-full border-4 border-white shadow-lg"></div>
-                <div className="ml-16 bg-gradient-to-br from-soft-cream to-white rounded-2xl p-6 shadow-lg">
-                  <div className="text-2xl font-bold text-healing-green mb-2 font-poppins">
-                    {milestone.year}
-                  </div>
-                  <h3 className="text-xl font-semibold text-accent-gray mb-3">
-                    {milestone.title}
-                  </h3>
-                  <p className="text-accent-gray/70">
-                    {milestone.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Team Section */}
       <section className="py-20 bg-gradient-to-br from-soft-cream to-white">
@@ -298,11 +253,11 @@ export function AboutPage() {
                 }`}
                 onClick={() => setActiveTeamMember(index)}
               >
-                <div className="relative h-80 overflow-hidden">
+        <div className="relative h-72 sm:h-80 md:h-96 lg:h-[28rem] overflow-hidden">
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 </div>
@@ -336,28 +291,28 @@ export function AboutPage() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 bg-gradient-to-r from-healing-green to-energy-orange">
+    <section className="py-20 bg-gradient-to-r from-coffee-brown to-warm-amber">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-poppins">
+      <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-poppins">
             Ready to Join Our Community?
           </h2>
-          <p className="text-xl text-white/90 mb-12 leading-relaxed">
+      <p className="text-xl text-white/90 mb-12 leading-relaxed">
             Take the first step towards meaningful connections and personal growth. 
             We're here to support your journey every step of the way.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
             <Button
-              variant="secondary"
+        variant="secondary"
               size="lg"
-              className="bg-white text-healing-green hover:bg-white/90 px-8 py-4"
+        className="bg-brown text-dark-roast hover:bg-dark-roast/90 px-8 py-4"
             >
               Browse Events
             </Button>
             <Button
-              variant="outline"
+        variant="outline"
               size="lg"
-              className="border-white text-white hover:bg-white hover:text-healing-green px-8 py-4"
+        className="border-white text-white hover:bg-white hover:text-dark-roast px-8 py-4"
             >
               Get in Touch
             </Button>

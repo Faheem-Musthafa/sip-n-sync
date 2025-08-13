@@ -26,18 +26,10 @@ export function Header() {
           <div className="flex items-center cursor-pointer" onClick={() => handleNavClick('/')}>
             <div className="w-10 h-10 bg-gradient-to-r from-coffee-brown to-warm-amber rounded-full flex items-center justify-center mr-3 overflow-hidden">
               <img 
-                src="/logo.svg" 
+                src="/sipns.svg" 
                 alt="Sip'n'Sync Logo" 
-                className="w-8 h-8 object-contain"
-                onError={(e) => {
-                  // Fallback to Coffee icon if logo doesn't load
-                  e.currentTarget.style.display = 'none';
-                  const fallbackIcon = e.currentTarget.nextElementSibling as HTMLElement;
-                  if (fallbackIcon) {
-                    fallbackIcon.style.display = 'block';
-                  }
-                }}
-              />
+                className="w-full h-full object-cover"
+               />
               <Coffee className="text-white hidden" size={20} />
             </div>
             <span className="text-2xl font-bold text-dark-roast font-poppins">

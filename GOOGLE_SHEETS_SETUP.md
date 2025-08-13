@@ -1,6 +1,38 @@
 # Google Sheets Integration Setup Guide
 
-## Method 1: Using Google Apps Script (Recommended)
+## Recommended: Vercel API + Google Sheets API (Service Account)
+
+This approach keeps secrets off the client, returns proper JSON (no no-cors), and lets you validate/rate-limit.
+
+1) Enable Google Sheets API
+- Create a Google Cloud project and enable “Google Sheets API”.
+- Create a Service Account. Generate a JSON key file.
+
+2) Share your Sheet
+- Create a spreadsheet (e.g., “Sip'n'Sync Event Registrations”).
+- Add a tab named “Registrations” with columns like: Timestamp, EventId, EventTitle, Name, Email, Phone, Message.
+- Share the sheet with the service account email as Editor.
+
+3) Configure Vercel env vars
+- GOOGLE_SERVICE_ACCOUNT_JSON: paste the JSON key (ensure private_key has proper \n escapes).
+- SHEET_ID: your sheet ID (from the URL: docs.google.com/spreadsheets/d/<SHEET_ID>/edit).
+- SHEET_TAB_NAME (optional): default “Registrations”.
+
+4) API Route
+- We added an API route at /api/registrations. It expects body:
+  {
+    name, email, phone?, eventId, eventTitle?, message?, timestamp?
+  }
+- It appends a row to the sheet.
+
+5) Client wiring
+- The client now posts to /api/registrations first, and falls back to Apps Script if needed.
+
+Notes
+- vercel.json was updated to preserve /api/* routes alongside SPA rewrites.
+- For additional security, consider adding input validation and captcha verification inside the API route.
+
+## Alternative: Using Google Apps Script (Simple)
 
 ### Step 1: Create a Google Sheet
 1. Go to [Google Sheets](https://sheets.google.com)

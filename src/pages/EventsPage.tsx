@@ -1,11 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
   Search, 
-  Filter, 
   Grid, 
   List,
-  Users,
-  Star,
   X,
   Sparkles,
   Coffee,
@@ -20,18 +17,6 @@ import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 
 type ViewMode = 'grid' | 'list';
 type SortOption = 'date' | 'title' | 'price' | 'popularity';
-
-interface FilterState {
-  search: string;
-  category: string;
-  location: string;
-  priceRange: [number, number];
-  showOnlyAvailable: boolean;
-  showOnlyFeatured: boolean;
-}
-
-const categories = ['All', 'Wellness', 'Productivity', 'Creativity', 'Community', 'Networking'];
-const locations = ['All', 'Downtown Coffee House', 'Tech Hub Café', 'Roastery Event Space', 'Community Center', 'Online'];
 const sortOptions = [
   { value: 'date', label: 'By Date' },
   { value: 'title', label: 'By Title' },
@@ -45,16 +30,14 @@ export function EventsPage() {
   const [sortBy, setSortBy] = useState<SortOption>('date');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
-  
-  const [filters, setFilters] = useState<FilterState>({
-    search: '',
-    category: 'All',
-    location: 'All',
-    priceRange: [0, 500],
-    showOnlyAvailable: false,
-    showOnlyFeatured: false,
-  });
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState<string>('All');
+  const [availableOnly, setAvailableOnly] = useState<boolean>(false);
+
+  const categories = useMemo(
+    () => ['All', ...Array.from(new Set(events.map((e: Event) => e.category)))],
+    [events]
+  );
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -66,19 +49,9 @@ export function EventsPage() {
         searchInput?.focus();
       }
       
-      // Filter shortcut (F)
-      if (e.key === 'f' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        const activeElement = document.activeElement;
-        if (activeElement?.tagName !== 'INPUT' && activeElement?.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-          setShowMobileFilters(true);
-        }
-      }
-      
       // Close modals (Escape)
       if (e.key === 'Escape') {
         setSelectedEvent(null);
-        setShowMobileFilters(false);
       }
       
       // View mode toggle (V)
@@ -112,48 +85,27 @@ export function EventsPage() {
   // Filter and sort events
   const filteredAndSortedEvents = useMemo(() => {
     const filtered = events.filter((event: Event) => {
-      // Search filter
-      if (filters.search) {
-        const searchTerm = filters.search.toLowerCase();
-        const matchesSearch = 
-          event.title.toLowerCase().includes(searchTerm) ||
-          event.description.toLowerCase().includes(searchTerm) ||
-          event.category.toLowerCase().includes(searchTerm) ||
-          event.location.toLowerCase().includes(searchTerm) ||
-          event.organizer.name.toLowerCase().includes(searchTerm);
-        
-        if (!matchesSearch) return false;
+      // Search
+      if (search) {
+        const term = search.toLowerCase();
+        const matches =
+          event.title.toLowerCase().includes(term) ||
+          event.description.toLowerCase().includes(term) ||
+          event.category.toLowerCase().includes(term) ||
+          event.location.toLowerCase().includes(term) ||
+          event.organizer.name.toLowerCase().includes(term);
+        if (!matches) return false;
       }
 
-      // Category filter
-      if (filters.category !== 'All' && event.category !== filters.category) {
-        return false;
-      }
+      // Category
+      if (category !== 'All' && event.category !== category) return false;
 
-      // Location filter
-      if (filters.location !== 'All' && event.location !== filters.location) {
-        return false;
-      }
-
-      // Price range filter
-      if (event.price < filters.priceRange[0] || event.price > filters.priceRange[1]) {
-        return false;
-      }
-
-      // Available spots filter
-      if (filters.showOnlyAvailable && event.currentAttendees >= event.maxAttendees) {
-        return false;
-      }
-
-      // Featured events filter
-      if (filters.showOnlyFeatured && !event.featured) {
-        return false;
-      }
+      // Availability
+      if (availableOnly && event.currentAttendees >= event.maxAttendees) return false;
 
       return true;
     });
 
-    // Sort events
     filtered.sort((a: Event, b: Event) => {
       switch (sortBy) {
         case 'date':
@@ -170,34 +122,7 @@ export function EventsPage() {
     });
 
     return filtered;
-  }, [events, filters, sortBy]);
-
-  const handleFilterChange = (key: keyof FilterState, value: string | boolean | [number, number]) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: value
-    }));
-  };
-
-  const clearAllFilters = () => {
-    setFilters({
-      search: '',
-      category: 'All',
-      location: 'All',
-      priceRange: [0, 500],
-      showOnlyAvailable: false,
-      showOnlyFeatured: false,
-    });
-  };
-
-  const activeFiltersCount = Object.entries(filters).filter(([key, value]) => {
-    if (key === 'search') return value !== '';
-    if (key === 'category') return value !== 'All';
-    if (key === 'location') return value !== 'All';
-    if (key === 'priceRange') return value[0] !== 0 || value[1] !== 500;
-    if (key === 'showOnlyAvailable' || key === 'showOnlyFeatured') return value;
-    return false;
-  }).length;
+  }, [events, search, category, availableOnly, sortBy]);
 
   if (loading) {
     return (
@@ -269,8 +194,8 @@ export function EventsPage() {
         </div>
       </section>
 
-      {/* Search and Filter Section */}
-      <section className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-200/50 shadow-sm">
+  {/* Search and Sort Section (non-sticky) */}
+  <section className="bg-white/95 backdrop-blur-sm border-b border-gray-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Main Search Bar */}
           <div className="flex flex-col lg:flex-row gap-4 items-center mb-6">
@@ -279,28 +204,14 @@ export function EventsPage() {
               <input
                 type="text"
                 placeholder="Search events, organizers, or topics... (Ctrl+K)"
-                value={filters.search}
-                onChange={(e) => handleFilterChange('search', e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-warm-amber focus:border-warm-amber transition-all duration-200 text-dark-roast placeholder-dark-roast/50 text-lg"
               />
             </div>
 
-            {/* Quick Action Buttons */}
+            {/* View toggle */}
             <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowMobileFilters(true)}
-                className="relative"
-              >
-                <Filter size={18} className="mr-2" />
-                Filters
-                {activeFiltersCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-warm-amber text-white text-xs rounded-full flex items-center justify-center">
-                    {activeFiltersCount}
-                  </span>
-                )}
-              </Button>
-
               <div className="flex items-center bg-gray-100 rounded-xl p-1">
                 <button
                   onClick={() => setViewMode('grid')}
@@ -327,123 +238,58 @@ export function EventsPage() {
               </div>
             </div>
           </div>
+          {/* Basic Filters + Sort */}
+          <div className="rounded-2xl bg-gradient-to-r from-cream-white to-white border border-coffee-brown/10 p-4 md:p-5 shadow-sm">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-3">
+                <label className="text-sm font-medium text-dark-roast/70" htmlFor="category-select">Category:</label>
+                <select
+                  id="category-select"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-dark-roast/80 focus:outline-none focus:ring-2 focus:ring-warm-amber focus:border-warm-amber transition-all duration-200 hover:bg-cream-white/80 shadow-sm"
+                >
+                  {categories.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
 
-          {/* Quick Filters */}
-          <div className="flex flex-wrap gap-3 items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-dark-roast/70">Quick filters:</span>
-              
-              <button
-                onClick={() => handleFilterChange('showOnlyFeatured', !filters.showOnlyFeatured)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  filters.showOnlyFeatured
-                    ? 'bg-warm-amber text-white'
-                    : 'bg-gray-100 text-dark-roast/70 hover:bg-gray-200'
-                }`}
-              >
-                <Star size={14} className="mr-1" />
-                Featured
-              </button>
-              
-              <button
-                onClick={() => handleFilterChange('showOnlyAvailable', !filters.showOnlyAvailable)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  filters.showOnlyAvailable
-                    ? 'bg-coffee-brown text-white'
-                    : 'bg-gray-100 text-dark-roast/70 hover:bg-gray-200'
-                }`}
-              >
-                <Users size={14} className="mr-1" />
-                Available
-              </button>
+                <label
+                  htmlFor="available-only"
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200 cursor-pointer shadow-sm ${
+                    availableOnly
+                      ? 'bg-coffee-brown text-white border-coffee-brown'
+                      : 'bg-gray-100 text-dark-roast/70 border-gray-200 hover:bg-gray-200'
+                  }`}
+                >
+                  <input
+                    id="available-only"
+                    type="checkbox"
+                    checked={availableOnly}
+                    onChange={(e) => setAvailableOnly(e.target.checked)}
+                    className="sr-only"
+                  />
+                  <span className={`w-2 h-2 rounded-full ${availableOnly ? 'bg-white' : 'bg-dark-roast/40'}`}></span>
+                  Available only
+                </label>
+              </div>
 
-              {/* Category Quick Filter */}
-              <select
-                value={filters.category}
-                onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="px-4 py-2 bg-gray-100 border-0 rounded-full text-sm font-medium text-dark-roast/70 focus:ring-2 focus:ring-warm-amber transition-all duration-200"
-              >
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Sort Options */}
-            <div className="ml-auto flex items-center gap-3">
-              <span className="text-sm font-medium text-dark-roast/70">Sort by:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="px-4 py-2 bg-gray-100 border-0 rounded-full text-sm font-medium text-dark-roast/70 focus:ring-2 focus:ring-warm-amber transition-all duration-200"
-              >
-                {sortOptions.map(option => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Clear Filters */}
-            {activeFiltersCount > 0 && (
-              <Button
-                variant="outline"
-                onClick={clearAllFilters}
-                size="sm"
-                className="text-red-600 border-red-200 hover:bg-red-50"
-              >
-                <X size={14} className="mr-1" />
-                Clear ({activeFiltersCount})
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Active Filters Display */}
-        {activeFiltersCount > 0 && (
-          <div className="bg-gray-50 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="text-xs font-medium text-dark-roast/60">Active filters:</span>
-                
-                {filters.search && (
-                  <span className="inline-flex items-center px-3 py-1 bg-warm-amber/10 text-warm-amber text-xs font-medium rounded-full">
-                    Search: "{filters.search}"
-                    <button
-                      onClick={() => handleFilterChange('search', '')}
-                      className="ml-2 hover:text-warm-amber/80"
-                    >
-                      <X size={12} />
-                    </button>
-                  </span>
-                )}
-                
-                {filters.category !== 'All' && (
-                  <span className="inline-flex items-center px-3 py-1 bg-coffee-brown/10 text-coffee-brown text-xs font-medium rounded-full">
-                    Category: {filters.category}
-                    <button
-                      onClick={() => handleFilterChange('category', 'All')}
-                      className="ml-2 hover:text-coffee-brown/80"
-                    >
-                      <X size={12} />
-                    </button>
-                  </span>
-                )}
-                
-                {filters.showOnlyFeatured && (
-                  <span className="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                    Featured only
-                    <button
-                      onClick={() => handleFilterChange('showOnlyFeatured', false)}
-                      className="ml-2 hover:text-yellow-600"
-                    >
-                      <X size={12} />
-                    </button>
-                  </span>
-                )}
+              <div className="ml-auto flex items-center gap-3">
+                <span className="text-sm font-medium text-dark-roast/70">Sort by:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-dark-roast/80 focus:outline-none focus:ring-2 focus:ring-warm-amber focus:border-warm-amber transition-all duration-200 hover:bg-cream-white/80 shadow-sm"
+                >
+                  {sortOptions.map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
-        )}
+          
+        </div>
       </section>
 
       {/* Results Section */}
@@ -466,8 +312,7 @@ export function EventsPage() {
           </div>
 
           <div className="text-sm text-dark-roast/60">
-            Press <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">F</kbd> for filters, 
-            <kbd className="px-2 py-1 bg-gray-100 rounded text-xs ml-1">V</kbd> to change view
+            Press <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">V</kbd> to change view
           </div>
         </div>
 
@@ -481,8 +326,8 @@ export function EventsPage() {
             <p className="text-dark-roast/70 mb-8 max-w-md mx-auto">
               Try adjusting your search terms or filters to find the perfect event for you.
             </p>
-            <Button onClick={clearAllFilters} variant="outline">
-              Clear All Filters
+            <Button onClick={() => setSearch('')} variant="outline">
+              Clear Search
             </Button>
           </div>
         ) : (
@@ -502,135 +347,18 @@ export function EventsPage() {
           </div>
         )}
 
-        {/* Load More Suggestion */}
-        {filteredAndSortedEvents.length > 0 && filteredAndSortedEvents.length < events.length && (
+        {/* View all suggestion when search is active */}
+        {search && filteredAndSortedEvents.length > 0 && filteredAndSortedEvents.length < events.length && (
           <div className="text-center py-12">
             <p className="text-dark-roast/70 mb-4">
               Showing {filteredAndSortedEvents.length} of {events.length} events
             </p>
-            <Button onClick={clearAllFilters} variant="outline">
+            <Button onClick={() => setSearch('')} variant="outline">
               View All Events
             </Button>
           </div>
         )}
       </section>
-
-      {/* Mobile Filter Modal */}
-      {showMobileFilters && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center p-4">
-          <div className="bg-white rounded-t-3xl w-full max-w-lg max-h-[80vh] overflow-hidden">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-dark-roast font-poppins">Filter Events</h3>
-                <button
-                  onClick={() => setShowMobileFilters(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X size={24} className="text-dark-roast/70" />
-                </button>
-              </div>
-            </div>
-
-            <div className="p-6 space-y-6 overflow-y-auto">
-              {/* Category Filter */}
-              <div>
-                <label className="block text-sm font-semibold text-dark-roast mb-3">Category</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {categories.map(category => (
-                    <button
-                      key={category}
-                      onClick={() => handleFilterChange('category', category)}
-                      className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                        filters.category === category
-                          ? 'bg-coffee-brown text-white'
-                          : 'bg-gray-100 text-dark-roast/70 hover:bg-gray-200'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Location Filter */}
-              <div>
-                <label className="block text-sm font-semibold text-dark-roast mb-3">Location</label>
-                <select
-                  value={filters.location}
-                  onChange={(e) => handleFilterChange('location', e.target.value)}
-                  className="w-full p-3 bg-gray-100 border-0 rounded-xl text-dark-roast focus:ring-2 focus:ring-warm-amber"
-                >
-                  {locations.map(location => (
-                    <option key={location} value={location}>{location}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Price Range */}
-              <div>
-                <label className="block text-sm font-semibold text-dark-roast mb-3">
-                  Price Range: ${filters.priceRange[0]} - ${filters.priceRange[1]}
-                </label>
-                <div className="space-y-3">
-                  <input
-                    type="range"
-                    min="0"
-                    max="500"
-                    value={filters.priceRange[1]}
-                    onChange={(e) => handleFilterChange('priceRange', [filters.priceRange[0], parseInt(e.target.value)])}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-dark-roast/60">
-                    <span>Free</span>
-                    <span>$500+</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Toggles */}
-              <div className="space-y-4">
-                <label className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-dark-roast">Featured Events Only</span>
-                  <input
-                    type="checkbox"
-                    checked={filters.showOnlyFeatured}
-                    onChange={(e) => handleFilterChange('showOnlyFeatured', e.target.checked)}
-                    className="w-5 h-5 text-warm-amber focus:ring-warm-amber rounded"
-                  />
-                </label>
-                
-                <label className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-dark-roast">Available Spots Only</span>
-                  <input
-                    type="checkbox"
-                    checked={filters.showOnlyAvailable}
-                    onChange={(e) => handleFilterChange('showOnlyAvailable', e.target.checked)}
-                    className="w-5 h-5 text-coffee-brown focus:ring-coffee-brown rounded"
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6">
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  onClick={clearAllFilters}
-                  className="flex-1"
-                >
-                  Clear All
-                </Button>
-                <Button 
-                  onClick={() => setShowMobileFilters(false)}
-                  className="flex-1"
-                >
-                  Apply Filters
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Scroll to Top Button */}
       {showScrollTop && (
