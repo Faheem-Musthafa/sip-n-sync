@@ -5,7 +5,7 @@ export const APP_CONFIG = {
   version: '1.0.0',
   contact: {
     email: 'sipnsync@gmail.com',
-    phone: '+1 (555) 123-SYNC',
+    phone: '+91 98765 43210',
     address: 'Malabar College of Advanced Studies, Vangara, kerala, India',
   },
   social: {

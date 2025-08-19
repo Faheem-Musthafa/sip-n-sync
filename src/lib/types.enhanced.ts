@@ -23,7 +23,10 @@ export interface User {
   updatedAt: Timestamp;
 }
 
-export interface Organizer extends Pick<User, 'name' | 'avatar'> {}
+export interface Organizer {
+  name: string;
+  avatar?: URL;
+}
 
 export interface Attendee extends Pick<User, 'name' | 'email'> {
   phone?: PhoneNumber;
@@ -61,6 +64,7 @@ export interface EventRegistration {
   eventId: ID;
   attendee: Attendee;
   message?: string;
+  paymentProofUrl?: URL;
   status: RegistrationStatus;
   registeredAt: Timestamp;
 }
@@ -99,32 +103,6 @@ export interface Testimonial {
   createdAt: Timestamp;
 }
 
-// API types
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
-  timestamp?: Timestamp;
-}
-
-export interface ApiError extends Error {
-  code?: string;
-  status?: number;
-  data?: any;
-}
-
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    pages: number;
-    hasNext: boolean;
-    hasPrevious: boolean;
-  };
-}
-
 // Hook return types
 export interface UseEventsReturn {
   events: Event[];
@@ -133,12 +111,6 @@ export interface UseEventsReturn {
   filters: EventFilters;
   setFilters: (filters: Partial<EventFilters>) => void;
   refetch: () => Promise<void>;
-}
-
-export interface UseEventRegistrationReturn {
-  register: (eventId: ID, data: Omit<EventRegistration, 'id' | 'eventId' | 'status' | 'registeredAt'>) => Promise<boolean>;
-  loading: boolean;
-  error: string | null;
 }
 
 // Component prop types
@@ -169,7 +141,7 @@ export interface ButtonProps extends BaseComponentProps {
 }
 
 // Form validation types
-export interface ValidationRule<T = any> {
+export interface ValidationRule<T = string> {
   required?: boolean;
   minLength?: number;
   maxLength?: number;
@@ -177,7 +149,7 @@ export interface ValidationRule<T = any> {
   custom?: (value: T) => string | undefined;
 }
 
-export interface FormField<T = any> {
+export interface FormField<T = string> {
   name: string;
   label: string;
   type: 'text' | 'email' | 'tel' | 'textarea' | 'select';

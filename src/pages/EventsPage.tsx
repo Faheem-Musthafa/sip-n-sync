@@ -11,9 +11,10 @@ import {
 import { Event } from '../lib/types.enhanced';
 import { useEvents } from '../hooks/useEvents';
 import { EventCard } from '../components/events/EventCard';
-import { EventRegistrationModal } from '../components/events/EventRegistrationModal';
+import EventRegistrationModal from '../components/events/EventRegistrationModal';
 import { Button } from '../components/ui/Button';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
+import { Toast } from '../components/ui/Toast';
 
 type ViewMode = 'grid' | 'list';
 type SortOption = 'date' | 'title' | 'price' | 'popularity';
@@ -28,11 +29,13 @@ export function EventsPage() {
   const { events, loading, error } = useEvents();
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortBy, setSortBy] = useState<SortOption>('date');
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('All');
   const [availableOnly, setAvailableOnly] = useState<boolean>(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [showRegister, setShowRegister] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type?: 'success' | 'error' | 'warning' | 'info' } | null>(null);
 
   const categories = useMemo(
     () => ['All', ...Array.from(new Set(events.map((e: Event) => e.category)))],
@@ -51,7 +54,7 @@ export function EventsPage() {
       
       // Close modals (Escape)
       if (e.key === 'Escape') {
-        setSelectedEvent(null);
+        // No modals to close
       }
       
       // View mode toggle (V)
@@ -80,6 +83,11 @@ export function EventsPage() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleEventRegistration = (event: Event) => {
+    setSelectedEvent(event);
+    setShowRegister(true);
   };
 
   // Filter and sort events
@@ -341,7 +349,7 @@ export function EventsPage() {
                 key={event.id}
                 event={event}
                 viewMode={viewMode}
-                onRegister={() => setSelectedEvent(event)}
+                onRegister={() => handleEventRegistration(event)}
               />
             ))}
           </div>
@@ -360,6 +368,25 @@ export function EventsPage() {
         )}
       </section>
 
+      {/* Registration Modal */}
+      <EventRegistrationModal
+        isOpen={showRegister}
+        event={selectedEvent}
+        onClose={() => setShowRegister(false)}
+        onSuccess={() => {
+          setToast({ message: 'Registration submitted! We\'ll be in touch soon.', type: 'success' });
+        }}
+      />
+
+      {/* Toast */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       {/* Scroll to Top Button */}
       {showScrollTop && (
         <button
@@ -369,15 +396,6 @@ export function EventsPage() {
         >
           <ArrowUp size={20} className="group-hover:-translate-y-0.5 transition-transform duration-200" />
         </button>
-      )}
-
-      {/* Registration Modal */}
-      {selectedEvent && (
-        <EventRegistrationModal
-          event={selectedEvent}
-          isOpen={!!selectedEvent}
-          onClose={() => setSelectedEvent(null)}
-        />
       )}
     </div>
   );

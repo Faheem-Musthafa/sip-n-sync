@@ -46,7 +46,7 @@ export function EventCard({ event, onRegister, viewMode = 'grid' }: EventCardPro
             <div className="absolute top-4 right-4">
               <div className="flex items-center text-sm text-white bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full">
                 <DollarSign size={14} className="mr-1" />
-                {event.price === 0 ? 'Free' : `$${event.price}`}
+                {event.price === 0 ? 'Free' : `₹${event.price}`}
               </div>
             </div>
 
@@ -167,7 +167,7 @@ export function EventCard({ event, onRegister, viewMode = 'grid' }: EventCardPro
         <div className="absolute top-4 right-4">
           <div className="flex items-center text-sm text-white bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full">
             <DollarSign size={14} className="mr-1" />
-            {event.price === 0 ? 'Free' : `$${event.price}`}
+            {event.price === 0 ? 'Free' : `₹${event.price}`}
           </div>
         </div>
         

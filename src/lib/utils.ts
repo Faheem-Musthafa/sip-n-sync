@@ -77,9 +77,9 @@ export const slugify = (text: string): string => {
 // Number utilities
 export const formatPrice = (price: number): string => {
   if (price === 0) return 'Free';
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'INR',
   }).format(price);
 };
 

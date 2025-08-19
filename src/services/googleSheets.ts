@@ -1,4 +1,4 @@
-import { EventRegistration } from '../lib/types';
+import { EventRegistration } from '../lib/types.enhanced';
 
 // Google Apps Script URL from deployment
 // TODO: Replace with your actual deployed script URL
@@ -33,6 +33,7 @@ export async function submitToGoogleSheets(
       eventId: eventId,
       eventChoice: finalEventTitle, // Use event title for better readability in sheets
       message: registration.message || '',
+      paymentProofUrl: registration.paymentProofUrl || '',
       timestamp: new Date().toISOString()
     };
 
