@@ -31,7 +31,9 @@ export async function submitToGoogleSheets(
       email: registration.attendee.email,
       phone: registration.attendee.phone || '',
       eventId: eventId,
-      eventChoice: finalEventTitle, // Use event title for better readability in sheets
+      // Send both keys for compatibility with different backends/scripts
+      eventChoice: finalEventTitle, // Used by Apps Script example
+      eventTitle: finalEventTitle,  // Used by custom backends
       message: registration.message || '',
       paymentProofUrl: registration.paymentProofUrl || '',
       timestamp: new Date().toISOString()
@@ -45,6 +47,20 @@ export async function submitToGoogleSheets(
     });
 
     if (resp.ok) return true;
+
+    // Local-dev fallback: direct webhook with CORS
+    const meta = import.meta as unknown as { env?: Record<string, string | undefined> };
+    const directWebhook = meta?.env?.VITE_SHEETS_WEBHOOK_URL as string | undefined;
+    if (directWebhook) {
+      const resp2 = await fetch(directWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        mode: 'cors',
+      });
+      if (resp2.ok) return true;
+      // Continue to Apps Script fallback
+    }
 
     // Fallback: attempt direct Apps Script (opaque response due to no-cors)
     await fetch(GOOGLE_SCRIPT_URL, {
