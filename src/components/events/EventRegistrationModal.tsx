@@ -142,7 +142,7 @@ export function EventRegistrationModal({ isOpen, event, onClose, onSuccess }: Pr
 										<p className="text-xs text-dark-roast/60 mt-2">Scan and pay, then upload the payment screenshot.</p>
 									</div>
 									<div>
-										<label className="block text-sm font-medium text-dark-roast mb-2">Upload payment screenshot (optional)</label>
+										<label className="block text-sm font-medium text-dark-roast mb-2">Upload payment screenshot *</label>
 										<input
 											type="file"
 											accept="image/png,image/jpeg,image/jpg,image/webp"
